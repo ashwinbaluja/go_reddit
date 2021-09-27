@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<head>
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==" crossorigin="anonymous" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+</head>
+<body id="top">
+    <div class="container">
+        <section>
+            <ul class="nav">
+                <li><a href="/">Breaddit</a></li>
+                <li><a>Account</a></li>
+            </ul>
+        </section>
+        {{range .Posts}}
+
+            <section>
+                <h4><a href="/post/{{.ID}}">{{.TitleAuthor}}</a></h4>
+                <p class="truncate">{{.Body}}</p>
+                <div> <button postid="{{.ID}}" class="upvote"> Upvote </button> <button class="downvote"> Downvote </button> </div>
+                <h6>{{.Points}} points, {{.Percent}}% upvoted</h6>
+            </section>
+
+        {{end}}
+    </div>
+</body>
+<style>
+    .truncate {
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .upvote {
+        background-color: rgb(190, 215, 209)
+    }
+    .downvote {
+        background-color: rgb(247, 235, 195)
+    }
+    section {
+        border-bottom: 1px solid #eee;
+    }
+    .nav {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    .nav > li {
+        float: left;
+        margin-right: 1rem;
+    }
+</style>
+<script>
+    a = location.href.split("/")
+    const id = a[a.length - 1]
+    console.log(id)
+   
+    document.querySelectorAll('.upvote').forEach(item => {
+        item.addEventListener('click', e => {
+            console.log(e.target)
+
+            var http = new XMLHttpRequest();
+            http.open('POST', "/a/post/" + e.target.getAttribute("postid") + "/upvote", true);
+            http.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+            http.setRequestHeader('Content-type', 'application/json');
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    location.reload()
+                }
+            }
+            http.send();
+        })
+    })
+
+    document.querySelectorAll('.downvote').forEach(item => {
+        item.addEventListener('click', e => {
+            console.log(e.target)
+
+            var http = new XMLHttpRequest();
+            http.open('POST', "/a/post/" + e.target.getAttribute("postid") + "/downvote", true);
+            http.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+            http.setRequestHeader('Content-type', 'application/json');
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    location.reload()
+                }
+            }
+            http.send();
+        })
+    })
+</script>
+</html>

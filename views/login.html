@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<head>
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==" crossorigin="anonymous" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+</head>
+<body id="top">
+    <div class="container">
+        <section>
+            <ul class="nav">
+                <li><a href="/">Breaddit</a></li>
+                <li><a>Account</a></li>
+            </ul>
+        </section>
+        <section>
+            <h4>Login</h4>
+            <div>
+                <div class="row">
+                    <input class="u-full-width" placeholder="username" type="text" name="user" id="username">
+                </div>
+                <div class="row">
+                    <input class="u-full-width" placeholder="password" type="password" name="pass" id="password">
+                </div>
+                <button class="button-primary" id="submit">Submit</button>
+            </div>        
+        </section>
+    </div>
+</body>
+<style>
+    #up {
+        background-color: rgb(190, 215, 209)
+    }
+    #down {
+        background-color: rgb(247, 235, 195)
+    }
+    section {
+        border-bottom: 1px solid #eee;
+    }
+    .button-primary {
+        background-color: rgb(204,241,255)
+    }
+    .nav {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    .nav > li {
+        float: left;
+        margin-right: 1rem;
+    }
+</style>
+<script>
+    document.getElementById("submit").addEventListener("click", (e) => {
+        var loginDetails = {
+            "user" : document.getElementById("username").value.trim(),
+            "pass" : document.getElementById("password").value.trim()
+        }
+        var loginText = JSON.stringify(loginDetails)
+        var http = new XMLHttpRequest();
+
+        http.open('POST', "/u/login", true);
+
+        http.setRequestHeader('Content-type', 'application/json');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                alert(http.responseText);
+                console.log(http.responseText)
+                localStorage.setItem('token', http.responseText)
+            }
+        }
+        http.send(loginText);
+    });
+
+</script>
+</html>
